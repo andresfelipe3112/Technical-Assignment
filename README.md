@@ -127,17 +127,92 @@ npm run test
 Authorization: Bearer <ACCESS_TOKEN>
 ```
 
----
+```
+test CURL:
 
-## 🎯 Evaluation Criteria Alignment
 
-| Criteria                   | How It’s Addressed                                                                   |
-| -------------------------- | ------------------------------------------------------------------------------------ |
-| **Backend Design**         | Modular, maintainable, following SOLID and separation of concerns.                   |
-| **Security & Correctness** | JWT authentication, role-based authorization, input validation, atomic transactions. |
-| **Performance Awareness**  | Pagination, Redis caching, efficient TypeORM queries.                                |
-| **Testing Discipline**     | Comprehensive coverage of business logic, guards, and user flows.                    |
-| **DevOps Practices**       | Docker Compose for reproducible deployment.                                          |
-| **Documentation Clarity**  | Clear README, setup instructions, and technical decisions explained.                 |
-| **(Optional Bonus)**       | API ready for frontend integration to demonstrate full-stack capability.             |
+API_URL="http://localhost:3000"
+PASSWORD="password123"
+RAND=$RANDOM
+
+SENDER_EMAIL="sender$RAND@example.com"
+SENDER_FIRST_NAME="Sender$RAND"
+SENDER_LAST_NAME="User"
+
+curl -s -X POST "$API_URL/auth/register" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"email\": \"$SENDER_EMAIL\",
+    \"password\": \"$PASSWORD\",
+    \"firstName\": \"$SENDER_FIRST_NAME\",
+    \"lastName\": \"$SENDER_LAST_NAME\"
+  }"
+
+SENDER_LOGIN=$(curl -s -X POST "$API_URL/auth/login" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"email\": \"$SENDER_EMAIL\",
+    \"password\": \"$PASSWORD\"
+  }")
+
+SENDER_JWT=$(echo $SENDER_LOGIN | grep -o '"access_token":"[^"]*"' | sed 's/"access_token":"\(.*\)"/\1/' | tr -d '\n')
+
+SENDER_WALLET_RESPONSE=$(curl -s -X POST "$API_URL/wallets" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $SENDER_JWT" \
+  -d '{"type":"business"}')
+
+FROM_WALLET=$(echo $SENDER_WALLET_RESPONSE | grep -o '"walletNumber":"[^"]*"' | sed 's/"walletNumber":"\(.*\)"/\1/')
+
+DEST_EMAIL="dest$RAND@example.com"
+DEST_FIRST_NAME="Dest$RAND"
+DEST_LAST_NAME="User"
+
+curl -s -X POST "$API_URL/auth/register" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"email\": \"$DEST_EMAIL\",
+    \"password\": \"$PASSWORD\",
+    \"firstName\": \"$DEST_FIRST_NAME\",
+    \"lastName\": \"$DEST_LAST_NAME\"
+  }"
+
+DEST_LOGIN=$(curl -s -X POST "$API_URL/auth/login" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"email\": \"$DEST_EMAIL\",
+    \"password\": \"$PASSWORD\"
+  }")
+
+DEST_JWT=$(echo $DEST_LOGIN | grep -o '"access_token":"[^"]*"' | sed 's/"access_token":"\(.*\)"/\1/' | tr -d '\n')
+
+DEST_WALLET_RESPONSE=$(curl -s -X POST "$API_URL/wallets" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $DEST_JWT" \
+  -d '{"type":"personal"}')
+
+TO_WALLET=$(echo $DEST_WALLET_RESPONSE | grep -o '"walletNumber":"[^"]*"' | sed 's/"walletNumber":"\(.*\)"/\1/')
+
+curl -s -X POST "$API_URL/transactions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $SENDER_JWT" \
+  -d "{
+    \"amount\": 0.50,
+    \"description\": \"Test internal transfer\",
+    \"type\": \"internal\",
+    \"toWalletNumber\": \"$TO_WALLET\"
+  }"
+
+curl -s -X POST "$API_URL/transactions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $SENDER_JWT" \
+  -d "{
+    \"amount\": 50.00,
+    \"description\": \"External payment\",
+    \"type\": \"external\",
+    \"toWalletNumber\": \"$TO_WALLET\",
+    \"externalProvider\": \"paypal\"
+  }"
+
+```
 
