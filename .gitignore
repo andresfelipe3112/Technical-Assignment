@@ -1,0 +1,54 @@
+# Node modules
+node_modules/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+dist/
+build/
+.test.test
+
+# TypeScript
+*.tsbuildinfo
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Jest coverage
+coverage/
+*.lcov
+
+# Docker
+docker-compose.override.yml
+*.dockerignore
+*.env.*.local
+
+# Optional: PostgreSQL dump files
+*.sql
+
+# Optional: temporary files
+tmp/
+temp/
+
+# NPM package lock files (optional)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
