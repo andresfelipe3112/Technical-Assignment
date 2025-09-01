@@ -70,8 +70,7 @@ This project implements a **transaction management backend**, developed with **N
 ### 2. Clone the repository
 
 ```bash
-git clone <YOUR_REPOSITORY_URL>
-cd <PROJECT_NAME>
+git clone <https://github.com/andresfelipe3112/Technical-Assignment>
 ```
 
 ### 3. Configure environment variables
