@@ -1,4 +1,4 @@
-// src/wallets/entities/wallet.entity.ts
+
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { ObjectType, Field, ID, Float, registerEnumType } from '@nestjs/graphql';
 import { User } from '../../users/entities/user.entity';

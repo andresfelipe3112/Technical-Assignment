@@ -20,29 +20,28 @@ import { TransactionsModule } from './transactions/transactions.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get<string>('DATABASE_HOST') ?? 'localhost',
-        port: parseInt(configService.get<string>('DATABASE_PORT') ?? '5432', 10),
-        username: configService.get<string>('DATABASE_USER') ?? 'postgres',
-        password: configService.get<string>('DATABASE_PASSWORD') ?? 'postgres',
-        database: configService.get<string>('DATABASE_NAME') ?? 'postgres',
+        host: configService.get<string>('DATABASE_HOST') || 'postgres',
+        port: Number(configService.get<string>('DATABASE_PORT')) || 5432,
+        username: configService.get<string>('DATABASE_USER') || 'postgres',
+        password: configService.get<string>('DATABASE_PASSWORD') || 'postgres123',
+        database: configService.get<string>('DATABASE_NAME') || 'transaction_db',
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
         logging: true,
       }),
     }),
 
-    // ✅ Cache global (IMPORTANTE: async no necesario, no await)
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         isGlobal: true,
         store: redisStore({
-          url: configService.get<string>('REDIS_URL') ?? 'redis://localhost:6379',
+          url: `redis://${configService.get('REDIS_HOST') || 'redis'}:${configService.get('REDIS_PORT') || 6379}`,
           database: 0,
         }),
         ttl: 600,
-      })as any,
+      }) as any,
     }),
 
     GraphQLModule.forRoot<ApolloDriverConfig>({
