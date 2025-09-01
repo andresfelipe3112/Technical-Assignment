@@ -30,7 +30,7 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    // Crear billetera automáticamente al registrarse
+
     await this.walletsService.createWallet(user.id);
 
     const tokens = this.generateTokens(user.id, user.email, user.role);

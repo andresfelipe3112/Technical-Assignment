@@ -32,8 +32,5 @@ create(@CurrentUser() user: User, @Body() createWalletDto: CreateWalletDto) {
     return this.walletsService.findByWalletNumber(walletNumber);
   }
 
-//   @Patch(':id')
-//   update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto) {
-//     return this.walletsService.updateWallet(id, updateWalletDto);
-//   }
+
 }

@@ -4,7 +4,7 @@ import { TransactionType, TransactionStatus } from '../emuns/transaction.enums';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
-// justo arriba de todos los imports
+
 vi.mock('../entities/transaction.entity', () => ({
   Transaction: class MockTransaction {},
 }));

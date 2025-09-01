@@ -1,4 +1,4 @@
-// src/transactions/dto/create-transaction.dto.ts
+
 import { IsString, IsNumber, IsEnum, Min, IsOptional } from 'class-validator';
 import { InputType, Field, Float } from '@nestjs/graphql';
 import { TransactionType } from '../emuns/transaction.enums';

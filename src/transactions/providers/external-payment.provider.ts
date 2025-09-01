@@ -18,10 +18,10 @@ export interface ExternalTransactionResponse {
 @Injectable()
 export class ExternalPaymentProvider {
   async processExternalTransfer(request: ExternalTransactionRequest): Promise<ExternalTransactionResponse> {
-    // Simulación de llamada a API externa
+
     await this.simulateNetworkDelay();
 
-    // Simular respuesta exitosa o fallida (90% éxito)
+
     const isSuccess = Math.random() > 0.1;
 
     if (isSuccess) {

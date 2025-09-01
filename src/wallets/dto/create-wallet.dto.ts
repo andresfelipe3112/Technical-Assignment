@@ -10,7 +10,7 @@ export class CreateWalletDto {
   @Field()
   balance: number;
 
-  // si hay enums
+
   @Field(() => WalletType)
     @IsOptional()
   type: WalletType;
